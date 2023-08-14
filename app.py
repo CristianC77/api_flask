@@ -1,27 +1,3 @@
-'''from flask import Flask, request
-
-app=Flask(__name__)
-@app.route("/")
-def home():
-    app.logger.info(f'solicitud en la ruta {request.path}')
-    return "<p>Hola mundo bienvenidos a flask</p>"
-
-@app.route("/saludar/<nombre>")
-def saludar(nombre):
-    app.logger.info(f'solicitud en la ruta {request.path}')
-    return f"Hola {nombre}"
-
-@app.route("/edad/<int:edad>")
-def edad(edad):
-    app.logger.info(f'solicitud en la ruta {request.path}')
-    return f"Tu edad es {edad}"
-
-@app.get("/api/user/<user>")
-def user(user):
-    valores={'user':user}
-    return valores'''
-
-
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
@@ -59,10 +35,13 @@ def addProduct():
     new_product = {
         'name': request.json['name'],
         'price': request.json['price'],
-        'quantity': 10
+        'quantity': request.json['quantity'],
     }
     products.append(new_product)
     return jsonify({'products': products})
+"""se crea la funcion de crear en donde se crea la variable New_product en la cual es un formato json en la que recibira el nombre, precio y cantidad
+la cual si se ingresa la url anterior en insomnia se creara un formato json con los campos mencionados y aparecera la lista de productos con el dato insertado
+previamente"""
 
 # http://127.0.0.1:5000/products/laptop es la direccion que se usa para actualizar y el ultimo "/" se usa para seleccionar el dato que se cambiara
 @app.route('/products/<string:product_name>', methods=['PUT'])
@@ -78,6 +57,10 @@ def editProduct(product_name):
         })
     return jsonify({'message': 'Product Not found'})
 
+"""se crea la funcion de editar en donde se crea la variable productsFound y hacemos bucle for para encontrarlo si hay un dato igual al que hay 
+entonces se va a actualizar en nombre, precio o la cantidad dependiendo de lo que se quiera hacer y aparece un mensage de producto actualizado
+y si se escribe un dato inexistente apararece que no se encuentra"""
+
 # http://127.0.0.1:5000/products/laptop es la direccion que se usa para eliminar y el ultimo "/" se usa para seleccionar el dato que se eliminara ya que al no tener id se reemplazara por el nombre del dato
 @app.route('/products/<string:product_name>', methods=['DELETE'])
 def deleteProduct(product_name):
@@ -88,7 +71,9 @@ def deleteProduct(product_name):
             'message': 'Product Deleted',
             'products': products
         })
-
+"""se crea la funcion de eliminar en donde se crea la variable productsFound y hacemos bucle for para encontrarlo si es mayor a 0
+es porque lo encontro y eliminamos el dato por el name que tenga si aparece un dato igual que el name aparece que se elimino
+y si hay un dato igual al que se puso aparece que no se encuentra"""
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
 
